@@ -1,0 +1,25 @@
+
+#python manage.py startapp moduleName
+
+#python manage.py print_settings
+python manage.py clean_pyc
+
+# python manage.py makemigrations
+# python manage.py migrate
+# Compilação do package
+# python setup.py sdist
+# Remoção do package
+# sudo python setup.py clean --all
+# python setup.py install --record files.txt
+# cat files.txt | xargs rm -rf
+# python manage.py inspectdb > models.py
+# python manage.py startapp aplicacao
+# python manage.py graph_models -a -o myapp_models.png
+# python manage.py dumpdata --all --output alugarImovel/fixtures/initial_data2.json
+# python manage.py sqlmigrate --database imobiliar imobiliar 0001_initial
+
+python manage.py runserver_plus 0.0.0.0:8000
+# python manage.py runserver 0.0.0.0:8000
+
+# celery -A alugarImovel worker -l info
+# python manage.py flow_graph --svg atendimento.flows.AtendimentoFlow

@@ -1,0 +1,105 @@
+# CREATE DATABASE catgree WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8';
+# ALTER DATABASE catgree OWNER TO catgree;
+Cadastros:
+    - Cor: enf
+    - Raças
+    - Raça x restrições: lembrete para operador ou bloqueio (ex. exames obrigatórios)
+    - Exame
+    - Exame x Raça
+    - Cor x Raça, mas com scape e sinaliza possibilidade de rerro/risco
+    - Clubes
+    - Competições?
+    - Título de competições?
+    - Gatos
+        Pais
+        Raça
+        Exame obrigatórios
+        Cor: analise de risco
+        Clube
+        Histórico de registros
+        Histórico de donos
+        Títulos de competições?
+        Fotos?
+        Status
+        Habilitado/com risco/pendente
+
+    - Relationship Coefficient??
+    - Acasalamentos??
+    - Ninhadas? Não é resultado do registro dos pais? Precisa de registro específico?
+    - Traits?
+
+Relatórios:
+    - Pedigree
+    - o que mais?
+
+Formulário web para confecção pedigree
+Solicitação serviço web
+Varios usuarios por clube
+Inscrição nas exposições
+
+Host:
+    - Externo: AWS, Locaweb, etc.
+
+
+
+
+Cadastros:
+    - Cor: enf
+    - Raças
+    - Raça x restrições: lembrete para operador ou bloqueio (ex. exames obrigatórios)
+    - Exame
+    - Exame x Raça
+    - Cor x Raça, mas com scape e sinaliza possibilidade de rerro/risco
+    - Clubes
+    - Competições - AOENAS INSCRIÇÕES NO FUTUTO, SEGUNDO BLICO
+    - Título de competições TE PASSO ARQUIVO, SAO POUCOS
+    - Gatos
+        Pais
+        Raça
+        Exame obrigatórios ESPACO PARA ARQUIVO DE PDF
+        Cor: analise de risco
+        Clube
+        Histórico de registros
+        Histórico de donos
+        Títulos de competições? SIM
+        Fotos? NAO
+        Status
+        Habilitado/com risco/pendente
+
+    - Relationship Coefficient?? NAO
+    - Acasalamentos?? NAO
+    - Ninhadas? Não é resultado do registro dos pais? Precisa de registro específico? PRECISO DE UMA TELA QUE CLICANDO O NOME DA MAE EU VEJA FACIL AS CEZES EM QUE ELA ORIU E QUEM FOI O PAI E FILHOTES
+    - Traits? NEM SEI O QUE É
+
+Relatórios:
+    - Pedigree
+    - o que mais? CERTIFICADO DE PROPRIEDADE E CERTIFICADO DE GATIL E CERTIFICADOS DE TITULOS
+
+Formulário web para confecção pedigree
+Solicitação serviço web
+Varios usuarios por clube NAO, APENAS UMA PESSOA CRIA PEDIGREES, ALEM DELA 2 SENHAS MASTER OARA AJUSTES E SEIS SENHAS PARA LEITURA E ACESSO AO SITE DE SOLICITACAO DE SERVICO, MAS ESSAS SENHAS NAO MUDAM NEM UMA LETRA NO SISTEMA, NAO EDITAM NADA
+Inscrição nas exposições
+
+Host:
+    - Externo: AWS, Locaweb, etc.
+
+Rodrigo: Respondi em CAPS
+
+
+ABL
+ABS
+ALH
+AMS
+AMW
+ASH
+AUM
+BOM
+BRX
+MKB
+NEB
+RGM
+TIF
+TOL
+TOS
+
+

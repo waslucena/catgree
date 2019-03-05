@@ -1,0 +1,33 @@
+#Django>=1.9.7,<1.10
+Django>=1.11.15,<2
+#-e git+git://github.com/maraujop/django-crispy-forms.git@dev#egg=django-crispy-forms
+django-crispy-forms
+django-autocomplete-light<=3.2.10
+django-extensions
+django-cache-machine
+psycopg2-binary
+Werkzeug
+#django-nvd3
+simplejson
+django-cors-headers
+django-render-block
+# pygraphviz # Teste para HEROKU
+celery
+#django-celery-beat
+django-js-asset
+django-polymorphic
+django-mptt
+python-dateutil
+django-tables2
+django-debug-toolbar
+django-model-utils
+# Instalados para Heroku
+gunicorn
+whitenoise[brotli]
+dj-database-url
+python-decouple
+Pillow==5.1.0
+django_compressor
+#-e ~was/Projects/ftlbase
+python-memcached
+
