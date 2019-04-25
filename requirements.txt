@@ -33,4 +33,4 @@ python-memcached
 django-reversion
 django-reversion-compare
 diff-match-patch
-ftlbase
+ftlbase>=1.0.18
