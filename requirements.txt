@@ -30,4 +30,6 @@ Pillow==5.1.0
 django_compressor
 #-e ~was/Projects/ftlbase
 python-memcached
-
+django-reversion
+django-reversion-compare
+diff-match-patch

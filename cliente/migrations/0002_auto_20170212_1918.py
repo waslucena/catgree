@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
                 ('complemento', models.CharField(blank=True, default='', max_length=60, null=True, verbose_name='Complemento')),
                 ('bairro', models.CharField(default='', help_text='Preencha sem abreviações. Ex: Penha', max_length=60)),
                 ('cep', models.CharField(default='', help_text='Ex.: 21020-122', max_length=9, verbose_name='CEP')),
-                ('created_at', AutoCreatedField(verbose_name='Data de Criação')),
+                ('created_at', common.fields.AutoCreatedAtField(verbose_name='Data de Criação')),
                 ('modified_at', AutoLastModifiedField(verbose_name='Última Modificação')),
                 ('tipo', models.CharField(blank=True, choices=[('F', 'Pessoa Física'), ('J', 'Pessoa Jurídica')], default='P', editable=False, max_length=1, null=True, verbose_name='Tipo de Pessoa')),
                 ('slug', models.SlugField(default='1', max_length=100, unique=True, validators=[

@@ -126,11 +126,11 @@ class Pessoa(models.Model):
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='pessoa_created_by',
                                    blank=True, null=True, verbose_name=u'Cadastrado Por')
-    created_at = AutoCreatedField(verbose_name=u'Data de Criação')
+    created_at = common_fields.AutoCreatedAtField(verbose_name=u'Data de Criação')
     modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,
                                     related_name='pessoa_modified_by', blank=True, null=True,
                                     verbose_name=u'Modificado Por')
-    modified_at = AutoLastModifiedField(verbose_name='Última Modificação')
+    modified_at = common_fields.AutoModifiedAtField(verbose_name='Última Modificação')
 
     tipo = models.CharField(max_length=1, null=True, blank=True, verbose_name='Tipo de Pessoa', default=DEFAULT_TIPO,
                             choices=TIPO_PESSOA_C, editable=False)

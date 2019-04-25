@@ -136,7 +136,12 @@ INSTALLED_APPS = [
     # 'django_celery_results',  # This extension enables you to store Celery task results using the Django ORM
     'corsheaders',  # A Django App that adds CORS (Cross-Origin Resource Sharing) headers to responses.
     'whitenoise',
+    'reversion',
+    'reversion_compare',
 ]
+
+# Add reversion models to admin interface:
+ADD_REVERSION_ADMIN=True
 
 # Verifica se pygraphviz está instalado, pois no HEROKU não está funcionando
 try:
@@ -160,6 +165,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',  # debug_toolbar
     'common.middleware.FTLMiddleware',
+    'reversion.middleware.RevisionMiddleware',
 ]
 
 ROOT_URLCONF = 'catgree.urls'

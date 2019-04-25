@@ -8,3 +8,5 @@ default_app_config = 'catgree.apps.CatgreeConfig'
 # Django starts so that shared_task will use this app.
 
 # __all__ = ['celery_app', ]
+
+__version__ = '0.0.6'

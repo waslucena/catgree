@@ -1,12 +1,26 @@
 from dal import autocomplete
 from django.db.models import TextField, Q
 from django.db.models.functions import Cast
-from django.shortcuts import render
+
+# @login_required
+from basico.models import Regra, Gato, Raca, Gatil
+
 
 # Create your views here.
 
-# @login_required
-from basico.models import Regra, Gato
+
+class GatilAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Gatil.objects.none()
+
+        qs = Gatil.objects.all()
+
+        if self.q:
+            fil = Q(nome__icontains=self.q) | Q(proprietario__nome__icontains=self.q)
+            qs = qs.filter(fil)
+
+        return qs.order_by('nome', 'proprietario')
 
 
 class RegraAutocomplete(autocomplete.Select2QuerySetView):
@@ -17,7 +31,8 @@ class RegraAutocomplete(autocomplete.Select2QuerySetView):
         raca = self.forwarded.get('raca', None)
 
         if not raca:
-            return Regra.objects.all()
+            # return Regra.objects.all()
+            return Regra.objects.none()
 
         qs = Regra.objects.annotate(s_regra=Cast('regra', TextField()), s_descricao=Cast('descricao', TextField()))
 
@@ -38,24 +53,43 @@ class GatoAutocomplete(autocomplete.Select2QuerySetView):
         # if not self.request.user.is_authenticated:
         #     return Pessoa.objects.none()
 
-        qs = Gato.objects.all()
+        ems = self.forwarded.get('raca', None)
+
+        # Se não está autenticado ou se não tem raca, então retorna
+        if not self.request.user.is_authenticated:
+            return Regra.objects.none()
+
+        # Só podem ser pai/mãe os gatos que são da mesma raça ou de raças irmãs
+        # Se outcross então não faz filtragem por raça
+        outcross = self.forwarded.get('outcross', None)
+        if outcross and outcross == 'N':
+            if ems:
+                raca = Raca.objects.get(ems=ems)
+                racas = (raca.ems + ((',' + raca.raca_irma) if raca.raca_irma else '')).replace(' ', '')
+                qs = Gato.objects.filter(raca__ems__in=racas.split(','))
+        else:
+            qs = Gato.objects.all()
 
         if self.sexo != 'A':
             # qs = Pessoa.objects.filter(tipo=self.pessoa)
             qs = qs.filter(sexo=self.sexo)
-
         id = self.forwarded.get('id', None)
 
         if id:
             qs = qs.exclude(id=id)
 
         if self.q:
-            fil = Q(nome__icontains=self.q) | Q(gatil__icontains=self.q) | \
-                  Q(raca__icontains=self.q) | Q(cor__icontains=self.q)
-            if self.q.isdigit():
-                fil |= Q(id=self.q)
+            # qq = self.q.split(' ')
+            fil = Q()
+            for s in self.q.split(' '):
+                fil = fil & \
+                      (Q(nome__icontains=s) | Q(gatil__nome__icontains=s) |
+                       Q(raca__nome__icontains=s) | Q(cor__regra__icontains=s) |
+                       Q(pedigree_anterior__icontains=s))
+                if s.isdigit():
+                    fil |= Q(id=s)
+            # if self.q.isdigit():
+            #     fil |= Q(id=self.q)
             qs = qs.filter(fil)
 
         return qs.order_by('nome', 'gatil', 'raca', 'cor')
-
-

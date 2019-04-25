@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('descricao', models.CharField(blank=True, default='', max_length=255, verbose_name='Descrição')),
                 ('documento', models.FileField(upload_to='documentos/')),
-                ('created_at', AutoCreatedField(verbose_name='Data de Criação')),
+                ('created_at', common.fields.AutoCreatedAtField(verbose_name='Data de Criação')),
                 ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='documento_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Cadastrado Por')),
             ],
             options={
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                 ('nome', models.CharField(default='', max_length=100, verbose_name='Nome')),
                 ('sexo', models.CharField(choices=[('F', 'Fêmea'), ('M', 'Macho')], default='F', help_text='Sexo', max_length=1, verbose_name='Sexo')),
                 ('status', models.CharField(choices=[('C', 'Em cadastro'), ('P', 'Pendente'), ('H', 'Habilitado'), ('I', 'Inativo')], default='C', help_text='Status', max_length=1, verbose_name='Status')),
-                ('created_at', AutoCreatedField(verbose_name='Data de Criação')),
+                ('created_at', common.fields.AutoCreatedAtField(verbose_name='Data de Criação')),
                 ('modified_at', AutoLastModifiedField(verbose_name='Última Modificação')),
                 ('cor', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='basico.Regra', verbose_name='Cor')),
                 ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='gato_created_by', to=settings.AUTH_USER_MODEL, verbose_name='Cadastrado Por')),

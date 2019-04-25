@@ -1,8 +1,10 @@
-from common.models import SIM_NAO_C
-from django.conf import settings
+import reversion
+from common.fields import validateDateLTEToday
+from common.models import SIM_NAO_C, UserAudit
+from django.core.exceptions import ValidationError
 from django.db import models
 from model_utils import Choices
-from model_utils.fields import AutoCreatedField, AutoLastModifiedField, StatusField
+from model_utils.fields import StatusField
 
 from cliente.models import Pessoa
 
@@ -17,66 +19,7 @@ CATEGORIA_CHOICES = (
 )
 
 
-# class hystory(models.Model):
-#     tstamp timestamp DEFAULT now(),
-#     schemaname text,
-#     tabname text,
-#     operation text,
-#     who text DEFAULT current_user,
-#     new_val json,
-#     old_val json
-
-# class Cor(models.Model):
-#     """
-#     Cor
-#     """
-#     codigo = models.CharField(max_length=1, verbose_name=u'Código FIFe', primary_key=True, default='')
-#     nome = models.CharField(max_length=30, verbose_name=u'Nome', default='')
-#     descricao = models.CharField(max_length=120, verbose_name=u'Descrição', default='')
-#
-#     class Meta:
-#         verbose_name = u'Cor'
-#         verbose_name_plural = u'Cores'
-#         ordering = ('nome',)
-#
-#     def __str__(self):
-#         return '%s - %s' % (self.codigo, self.nome)
-#
-#
-# class Cor_Olhos(models.Model):
-#     """
-#     Cor_Olhos
-#     """
-#     codigo = models.CharField(max_length=2, verbose_name=u'Código FIFe', primary_key=True, default='')
-#     nome = models.CharField(max_length=30, verbose_name=u'Nome', default='')
-#     descricao = models.CharField(max_length=120, verbose_name=u'Descrição', default='')
-#
-#     class Meta:
-#         verbose_name = u'Cor dos Olhos'
-#         verbose_name_plural = u'Cores dos Olhos'
-#         ordering = ('nome',)
-#
-#     def __str__(self):
-#         return '%s - %s' % (self.codigo, self.nome)
-#
-#
-# class Cor_Complementar(models.Model):
-#     """
-#     Cor_Complementar
-#     """
-#     codigo = models.CharField(max_length=2, verbose_name=u'Código FIFe', primary_key=True, default='')
-#     nome = models.CharField(max_length=30, verbose_name=u'Nome', default='')
-#     descricao = models.CharField(max_length=120, verbose_name=u'Descrição', default='')
-#
-#     class Meta:
-#         verbose_name = u'Cor Complementar'
-#         verbose_name_plural = u'Cores Complementares'
-#         ordering = ('nome',)
-#
-#     def __str__(self):
-#         return '%s - %s' % (self.codigo, self.nome)
-
-
+@reversion.register()
 class Gatil(models.Model):
     """
     Gatil
@@ -115,6 +58,7 @@ class Raca(models.Model):
         return '%s' % (self.nome)
 
 
+@reversion.register()
 class Regra(models.Model):
     """
     Regra
@@ -134,28 +78,56 @@ class Regra(models.Model):
         return '%s - %s' % (self.regra, self.descricao)
 
 
-class Gato(models.Model):
+@reversion.register()
+class Ninhada(UserAudit):
+    """
+    Ninhada
+    """
+    STATUS = Choices(('1', 'Em cadastro'),
+                     ('2', 'Pendente'),
+                     ('3', 'Habilitado'),
+                     ('4', 'Homologado'),
+                     ('5', 'Inativo'))
+
+    datanasc = models.DateField(blank=True, null=True, verbose_name='Data de Nascimento')
+    gatil = models.ForeignKey(Gatil, on_delete=models.PROTECT, verbose_name='Gatil', blank=True, null=True)
+    outcross = models.CharField(max_length=1, choices=SIM_NAO_C, verbose_name='Outcross', default='N',
+                                help_text='Se o cruzamento é com raças não autorizadas.')
+    qtde = models.IntegerField(verbose_name='Quantidade de filhotes', null=True)
+    pai = models.ForeignKey('Gato', on_delete=models.PROTECT, related_name='ninhada_pai', verbose_name='Pai',
+                            blank=False, null=False)
+    mae = models.ForeignKey('Gato', on_delete=models.PROTECT, related_name='ninhada_mae', verbose_name='Mãe',
+                            blank=False, null=False)
+    status = StatusField(choices_name='STATUS', default='R')
+
+    class Meta:
+        verbose_name = 'Ninhada'
+        verbose_name_plural = 'Ninhadas'
+        unique_together = (('pai', 'mae', 'datanasc'),)
+        # ordering = ('gato', 'documento',)
+
+    def __str__(self):
+        return '%s - %s' % (self.pai, self.mae)
+
+@reversion.register()
+class Gato(UserAudit):
     """
     Gato
     """
-    STATUS = Choices('Em cadastro', 'Pendente', 'Habilitado', 'Inativo')
 
-    SEXO_CHOICES = (
+    STATUS = Ninhada.STATUS
+
+    LO_RX = Choices(('R', 'RX'),
+                    ('L', 'LO'), )
+
+    SEXO_CHOICES = Choices(
         ('F', 'Fêmea'),
         ('M', 'Macho'),
     )
 
-    # Pais: pai e mae
-    # Raça: raca
-    # Exame
-    # Cor: analise de risco: cor
-    # Clube: não tem clube, só gatil
-    # Status: status: Habilitado / com risco / pendente
-    # Histórico de registros
-    # Histórico de donos: Proprietario
-    # Títulos de competições? SIM
-    # Fotos? NAO
-    nome = models.CharField(max_length=100, verbose_name=u'Nome', default='')
+    ninhada = models.ForeignKey(Ninhada, on_delete=models.PROTECT, verbose_name='Ninhada', blank=True, null=True)
+
+    nome = models.CharField(max_length=100, verbose_name='Nome', default='')
     raca = models.ForeignKey(Raca, on_delete=models.PROTECT, verbose_name='Raça')
     cor = models.ForeignKey(Regra, on_delete=models.PROTECT, verbose_name='Cor')
     pai = models.ForeignKey("Gato", on_delete=models.PROTECT, related_name='gato_pai', verbose_name='Pai', blank=True,
@@ -163,16 +135,25 @@ class Gato(models.Model):
     mae = models.ForeignKey("Gato", on_delete=models.PROTECT, related_name='gata_mae', verbose_name='Mãe', blank=True,
                             null=True)
     gatil = models.ForeignKey(Gatil, on_delete=models.PROTECT, verbose_name='Gatil', blank=True, null=True)
-    sexo = models.CharField(max_length=1, choices=SEXO_CHOICES, verbose_name='Sexo', default='F', blank=False,
-                            null=False, help_text='Sexo')
-    status = StatusField(choices_name='STATUS')
+    sexo = StatusField(choices_name='SEXO_CHOICES', verbose_name='Sexo', default='F', blank=False, null=False)
+    outcross = models.CharField(max_length=1, choices=SIM_NAO_C, verbose_name='Outcross', default='N',
+                                help_text='Se o cruzamento é com raças não autorizadas.')
 
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='gato_created_by',
-                                   blank=True, null=True, verbose_name=u'Cadastrado Por')
-    created_at = AutoCreatedField(verbose_name='Data de Criação')
-    modified_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='gato_modified_by',
-                                    blank=True, null=True, verbose_name=u'Modificado Por')
-    modified_at = AutoLastModifiedField(verbose_name='Última Modificação')
+    microchip = models.CharField(max_length=15, verbose_name='Microchip', blank=True, null=True, unique=True,
+                                 help_text='O número de microchip é obrigatório para todos os gatos que estão sendo usados para reprodução, desta forma pai e mãe de cada ninhada devem ter obrigatoriamente número de microchip.')
+    lo_rx = StatusField(choices_name='LO_RX', verbose_name='LO/RX', default='R')
+    pedigree_anterior = models.CharField(max_length=15, verbose_name='Pedigree Anterior', blank=True, null=True,
+                                         default='',
+                                         help_text='Pedigree anterior se o gato veio de outra federação ou é estrangeiro.')
+    breeding = models.CharField(max_length=1, choices=SIM_NAO_C, verbose_name='Para Reprodução', default='S',
+                                help_text='Informe se se destina ou não a criação, essa informação estará presente no pedigree impresso.')
+    breeding_able = models.CharField(max_length=1, choices=SIM_NAO_C, verbose_name='Apto para Reprodução', default='N',
+                                     help_text='Se está apto para reprodução ou não.')
+    breeding_able_date = models.DateField(blank=True, null=True, verbose_name='Data documento',
+                                          validators=[validateDateLTEToday],
+                                          help_text='Se está apto para reprodução, é obrigatório informar a data de emissão do documento comprobatório.')
+
+    status = StatusField(choices_name='STATUS')
 
     class Meta:
         verbose_name = u'Gato'
@@ -180,8 +161,68 @@ class Gato(models.Model):
         # unique_together = (('raca', 'regra', 'descricao'),)
         ordering = ('raca', 'cor', 'nome')
 
+    @property
+    def pedigree(self):
+        return 'BR FFB {0:2s} {1:0=6d}'.format(self.LO_RX[self.lo_rx], self.id)
+
     def __str__(self):
-        return '%s - %s - %s - %s' % (self.nome, self.raca, self.cor, self.gatil)
+        return '{} - {} - {} - {} - {}'.format(self.pedigree, self.nome, self.raca, self.cor, self.gatil)
+
+    def clean_fields(self, exclude=None):
+        # Crítica de não ser nem o próprio pai nem a própria mãe
+        if self.pai and self.id == self.pai.id:
+            raise ValidationError({'pai': "O pai não pode ser o próprio gato!"})
+        if self.mae and self.id == self.mae.id:
+            raise ValidationError({'mae': "A mãe não pode ser a própria gata!"})
+
+        # Crítica de que a raca do gato tem que ser a mesma dos pais ou de raças irmãs das dos pais
+        if hasattr(self, 'raca') and self.raca:
+            racas = (self.raca.ems + ((',' + self.raca.raca_irma) if self.raca.raca_irma else '')).replace(' ', '')
+            racas = racas.split(',')
+            if self.pai and self.pai.raca_id not in racas and self.outcross == 'N':
+                raise ValidationError({'pai': "A pai tem que ser da mesma raça do gato ou de raças irmãs !"})
+            if self.mae and self.mae.raca_id not in racas and self.outcross == 'N':
+                raise ValidationError({'mae': "A mãe tem que ser da mesma raça do gato ou de raças irmãs !"})
+        else:
+            raise ValidationError({'raca': 'Raça é obrigatória.'})
+
+        # Crítica da cor valida para a raça
+        if not self.cor or self.cor.raca != self.raca:
+            raise ValidationError({'cor': "Cor selecionada não é válida para a raça escolhida !"})
+
+        # # Outcross não pode ser breeding
+        # if self.outcross == 'S' and self.breeding == 'S':
+        #     raise ValidationError({'breeding': "Outcross não pode ser para reprodução !"})
+
+        # Breeding
+        if self.breeding == 'S':
+            # Breeding tem que ter microchip
+            if not self.microchip or len(self.microchip) != 15:
+                raise ValidationError({
+                    'microchip': "Se está apto para reprodução, então tem que ter microchip e o tamanho do código deve ser 15 !"})
+
+            # Breeding: pais tem que ser cadastrados
+            if not self.pai:
+                raise ValidationError({
+                    'pai': "Se está apto para reprodução, então tem que ter pai !"})
+            if not self.mae:
+                raise ValidationError({
+                    'mae': "Se está apto para reprodução, então tem que ter mãe !"})
+
+            # Breeding pais tem que ter microchip
+            if not self.pai.microchip:
+                raise ValidationError({
+                    'pai': "Se está apto para reprodução, então tem o pai que ter microchip !"})
+            if not self.mae.microchip:
+                raise ValidationError({
+                    'mae': "Se está apto para reprodução, então tem a mãe que ter microchip !"})
+
+            # Breeding able tem que ter data do certificado
+            if not self.breeding_able_date:
+                raise ValidationError({
+                    'breeding_able_date': "Se está apto para reprodução, então tem que ser preenchida a data do certificado comprobatório !"})
+
+        return super().clean_fields(exclude=exclude)
 
 
 class Proprietario(models.Model):
@@ -204,15 +245,12 @@ class Proprietario(models.Model):
         return '%s - %s' % (self.proprietario, self.dataini)
 
 
-class Documento(models.Model):
+class Documento(UserAudit):
     """
     Documento
     """
     descricao = models.CharField(max_length=255, blank=True, verbose_name='Descrição', default='')
     documento = models.FileField(upload_to='documentos/')
-    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, blank=True, null=True,
-                                   related_name='documento_created_by', verbose_name=u'Cadastrado Por')
-    created_at = AutoCreatedField(verbose_name='Data de Criação')
 
     class Meta:
         verbose_name = 'Documento'
@@ -231,10 +269,12 @@ class Gato_Documento(models.Model):
     documento = models.ForeignKey(Documento, on_delete=models.PROTECT, verbose_name='Documento')
 
     class Meta:
-        verbose_name = 'Gato_Documento'
-        verbose_name_plural = 'Gato_Documentos'
+        verbose_name = 'Documento do Gato'
+        verbose_name_plural = 'Documentos do Gato'
         unique_together = (('gato', 'documento',),)
         ordering = ('gato', 'documento',)
 
     def __str__(self):
         return '%s - %s' % (self.gato, self.documento)
+
+

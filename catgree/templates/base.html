@@ -13,8 +13,9 @@
 {% comment %}
   <!-- Tell the browser to be responsive to screen width -->
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" > -->
-{% endcomment %}
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+{% endcomment %}
+  <meta content="width=device-width" name="viewport">
   {# Normalize = makes browsers render all elements more consistently and in line with modern standards #}
 {#{% compress css %}#}
   {# <link href="{% static 'css/normalize.css' %}" rel="stylesheet"> é necessário??? #}
@@ -74,7 +75,7 @@ desired effect
 <body class="disable-animations skin-blue sidebar-mini {% if request.COOKIES.toggleState != "sidebar-mini" %}{{ request.COOKIES.toggleState }}{% endif %}">
 <div class="wrapper">
 
-<script type="text/javascript" charset="utf-8">
+<script>
 // var disableMe = '{{ disableMe }}' == 'True';
 </script>
 
@@ -239,7 +240,7 @@ desired effect
 {% endif %}
 {% if perms.common.add_cor %}
         <li class="treeview">
-          <a href="#"><i class="fa fa-cat"></i></i> <span>Básicos</span>
+          <a href="#"><i class="fa fa-cat"></i> <span>Básicos</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -249,6 +250,7 @@ desired effect
             <li><a href="/#{% url 'raca' %}"><i class="far fa-dot-circle"></i> Raça</a></li>
             <li><a href="/#{% url 'regra' %}"><i class="far fa-dot-circle"></i> Regra de Cor</a></li>
             <li><a href="/#{% url 'gato' %}"><i class="far fa-dot-circle"></i> Gatos</a></li>
+            <li><a href="/#{% url 'ninhada' %}"><i class="far fa-dot-circle"></i> Ninhada</a></li>
           </ul>
         </li>
 {% endif %}
@@ -551,15 +553,15 @@ desired effect
 
 {# REQUIRED JS SCRIPTS #}
 {#{% compress js %}#}
-<script type="text/javascript" src="{% static 'js/js.cookie.min.js' %}"></script> {# lib para leitura/gravação de cookie #}
-<script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.maskedinput.min.js' %}"></script>
+<script src="{% static 'js/js.cookie.min.js' %}"></script> {# lib para leitura/gravação de cookie #}
+<script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'js/jquery.maskedinput.min.js' %}"></script>
 {# Bootstrap 3.3.6 #}
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap-datepicker.pt-BR.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datepicker.pt-BR.min.js' %}"></script>
 {# AdminLTE App #}
-<script type="text/javascript" src="{% static 'dist/js/app.min.js' %}"></script>
+<script src="{% static 'dist/js/app.min.js' %}"></script>
 <script>
 $.AdminLTESidebarTweak = {};
 
@@ -615,47 +617,48 @@ $(function () {
      user experience. Slimscroll is required when using the
      fixed layout. -->
 
-<script type="text/javascript" src="{% static 'js/jquery.django-inlines.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/accounting.min.js' %}"></script> {# biblioteca para formatar números em js #}
-<script type="text/javascript" src="{% static 'js/moment-2.22.1.min.js' %}"></script> {# momentjs - biblioteca para formatar data em js #}
-<script type="text/javascript" src="{% static 'js/locale/pt-br.js' %}"></script> {# momentjs - locale pt-BR #}
-{#<script type="text/javascript" src="{% static 'js/jquery.rest.min.js' %}"></script> {# DRF #}
-<script type="text/javascript" src="{% static 'js/common.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/tree.jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.django-inlines.js' %}"></script>
+<script src="{% static 'js/accounting.min.js' %}"></script> {# biblioteca para formatar números em js #}
+<script src="{% static 'js/moment-2.22.1.min.js' %}"></script> {# momentjs - biblioteca para formatar data em js #}
+<script src="{% static 'js/locale/pt-br.js' %}"></script> {# momentjs - locale pt-BR #}
+{#<script src="{% static 'js/jquery.rest.min.js' %}"></script> {# DRF #}
+<script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/tree.jquery.min.js' %}"></script>
 
 {% if idTree %}
-<script type="text/javascript" src="{% static 'js/tree.jquery.min.js' %}"></script>
-<script type="text/javascript" charset="utf-8">{# http://mbraak.github.io/jqTree #}
+<script src="{% static 'js/tree.jquery.min.js' %}"></script>
+<script>{# http://mbraak.github.io/jqTree #}
 var $tree = $("#{{ idTree }}");
 var acaoURL="{{ acaoURL|safe }}";
 var detalheText="{{ detail }}";
 var updateParentText="{{ updateParent }}";
 </script>
-<script type="text/javascript" src="{% static 'js/commonTree.js' %}"></script>
+<script src="{% static 'js/commonTree.js' %}"></script>
 {% endif %}
 
 <!-- riot -->
-{#<script type="text/javascript" src="{% static 'js/riot+compiler.min.js' %}"></script>#}
-<script type="text/javascript" src="{% static 'js/riot.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/route.js' %}"></script>
+{#<script src="{% static 'js/riot+compiler.min.js' %}"></script>#}
+<script src="{% static 'js/riot.js' %}"></script>
+<script src="{% static 'js/route.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'tags/ftl-menu-button.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-badge-days.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-workflow.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-include.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-modal.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-form-modal.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-timeout.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-error-message.js' %}"></script>
-<script type="text/javascript" src="{% static 'tags/ftl-tabs.js' %}"></script>
+<script src="{% static 'tags/ftl-menu-button.js' %}"></script>
+<script src="{% static 'tags/ftl-badge-days.js' %}"></script>
+<script src="{% static 'tags/ftl-workflow.js' %}"></script>
+<script src="{% static 'tags/ftl-include.js' %}"></script>
+<script src="{% static 'tags/ftl-modal.js' %}"></script>
+<script src="{% static 'tags/ftl-form-modal.js' %}"></script>
+<script src="{% static 'tags/ftl-timeout.js' %}"></script>
+<script src="{% static 'tags/ftl-error-message.js' %}"></script>
+<script src="{% static 'tags/ftl-tabs.js' %}"></script>
 {% comment Desativado temporariamente %}
-<script type="text/javascript" src="{% static 'tags/ftl-breadcrumb.js' %}"></script>
+<script src="{% static 'tags/ftl-breadcrumb.js' %}"></script>
 {% endcomment %}
 
-<script type="text/javascript" charset="utf-8">
+<script>
 $(document).ready(function() {
   rotas = [
     { 'rota': "{% url 'gatil' %}",                         'nome': 'Gatil',                                     'url': '{% url 'gatil' %}',                'reload': false },
+    { 'rota': "{% url 'ninhada' %}",                       'nome': 'Ninhada',                                   'url': '{% url 'ninhada' %}',              'reload': false },
     { 'rota': "{% url 'gato' %}",                          'nome': 'Gato',                                      'url': '{% url 'gato' %}',                 'reload': false },
     { 'rota': "{% url 'raca' %}",                          'nome': 'Raça',                                      'url': '{% url 'raca' %}',                 'reload': false },
     { 'rota': "{% url 'regra' %}",                         'nome': 'Regra de Cor',                              'url': '{% url 'regra' %}',                'reload': false },
@@ -689,27 +692,27 @@ $(document).ready(function() {
   document.getElementById('ftl-page-load').value='loaded'; // Sinaliza que concluiu o carregamento da página
 });
 </script>
-<script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/jquery.highlight.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/dataTables.searchHighlight.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/buttons.print.min.js' %}"></script>
+<script src="{% static 'js/datatables.min.js' %}"></script>
+<script src="{% static 'js/jquery.highlight.js' %}"></script>
+<script src="{% static 'js/dataTables.searchHighlight.min.js' %}"></script>
+<script src="{% static 'js/buttons.print.min.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/select2/jquery.init.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/select2/autocomplete.init.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/select2/select2.full.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/select2/select2.js' %}"></script>
+<script src="{% static 'js/select2/jquery.init.js' %}"></script>
+<script src="{% static 'js/select2/autocomplete.init.js' %}"></script>
+<script src="{% static 'js/select2/select2.full.js' %}"></script>
+<script src="{% static 'js/select2/select2.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/select2/select2-forward.js' %}"></script>
+<script src="{% static 'js/select2/select2-forward.js' %}"></script>
 
-<script type="text/javascript" src="{% static 'js/select2/pt-br.js' %}"></script>
+<script src="{% static 'js/select2/pt-br.js' %}"></script>
 
 {# jquery.event-trace: Usado para logar todos os eventos gerados pelo jquery #}
-{#<script type="text/javascript" src="{% static 'js/jquery.event-trace.js' %}"></script>#}
+{#<script src="{% static 'js/jquery.event-trace.js' %}"></script>#}
 
 {% block extrajavascript %}
 {# DAL - Django Autocomplete Light coloca em media do Widget o css usado e os js #}
 {{ form.media.js }}
-{% if extrajavascript %}<script type="text/javascript" charset="utf-8">{{ extrajavascript|safe }}</script>{% endif %}
+{% if extrajavascript %}<script>{{ extrajavascript|safe }}</script>{% endif %}
 {% endblock %}
 
 {#{% endcompress %}#}
