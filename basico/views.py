@@ -53,20 +53,19 @@ class GatoAutocomplete(autocomplete.Select2QuerySetView):
         # if not self.request.user.is_authenticated:
         #     return Pessoa.objects.none()
 
-        ems = self.forwarded.get('raca', None)
-
         # Se não está autenticado ou se não tem raca, então retorna
         if not self.request.user.is_authenticated:
             return Regra.objects.none()
 
+        ems = self.forwarded.get('raca', None)
+
         # Só podem ser pai/mãe os gatos que são da mesma raça ou de raças irmãs
         # Se outcross então não faz filtragem por raça
         outcross = self.forwarded.get('outcross', None)
-        if outcross and outcross == 'N':
-            if ems:
-                raca = Raca.objects.get(ems=ems)
-                racas = (raca.ems + ((',' + raca.raca_irma) if raca.raca_irma else '')).replace(' ', '')
-                qs = Gato.objects.filter(raca__ems__in=racas.split(','))
+        if outcross and outcross == 'N' and ems:
+            raca = Raca.objects.get(ems=ems)
+            racas = (raca.ems + ((',' + raca.raca_irma) if raca.raca_irma else '')).replace(' ', '')
+            qs = Gato.objects.filter(raca__ems__in=racas.split(','))
         else:
             qs = Gato.objects.all()
 

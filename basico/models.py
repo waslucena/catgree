@@ -224,6 +224,20 @@ class Gato(UserAudit):
 
         return super().clean_fields(exclude=exclude)
 
+    def save(self, *args, **kwargs):
+        # Quando vem de ninhada os campos de pai, mãe e gatil estão hidden e não são preenchidos
+        # Mas é pra ser aqui ou no clean?
+        if self.ninhada and not self.pai:
+            self.pai = self.ninhada.pai
+
+        if self.ninhada and not self.mae:
+            self.mae = self.ninhada.mae
+
+        if self.ninhada and not self.gatil:
+            self.gatil = self.ninhada.gatil
+
+        super().save(*args, **kwargs)
+
 
 class Proprietario(models.Model):
     """

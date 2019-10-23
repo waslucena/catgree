@@ -26,11 +26,14 @@ gunicorn
 whitenoise[brotli]
 dj-database-url
 python-decouple
-Pillow==5.1.0
-django_compressor
+Pillow>=6.2.0  #==5.1.0  # Image library Security issue
+#django_compressor
 #-e ~was/Projects/ftlbase
 python-memcached
 django-reversion
 django-reversion-compare
 diff-match-patch
-ftlbase>=1.0.18
+ftlbase>=1.0.23
+#/home/was/Projects/ftlbase/dist/ftlbase-1.0.23-py2.py3-none-any.whl
+
+

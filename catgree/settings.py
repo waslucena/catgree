@@ -31,6 +31,9 @@ DATABASES = {
     )
 }
 ##################################################################
+# para King Host
+KING = False
+##################################################################
 
 # Crispy template
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -41,9 +44,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
-SITE_URL = 'http://catgree.ftl.com.br:8069'
+# SITE_URL = 'http://catgree.ftl.com.br:8069'
+SITE_URL = 'http://www.tbridge.com.br/catgree/'
+
 # ADMINS = ( ('was', 'was@ftl.com.br'), )
 SITE_ID = 1
+
+LOGOUT_REDIRECT_URL = SITE_URL
 
 # O media eh onde ficarao os arquivos de upload pela administracao, fotos, videos, pdfs, etc.
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media')
@@ -269,7 +276,12 @@ LOCALE_PATHS = (
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_URL = '/static/'
+if KING:
+    STATIC_URL = 'http://www.tbridge.com.br/catgree/static/'
+    FORCE_SCRIPT_NAME = '/catgree'
+else:
+    STATIC_URL = '/static/'
+
 # STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_ROOT = os.path.join(PROJECT_PATH, 'staticfiles')
@@ -294,8 +306,13 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Autenticação
-LOGIN_URL = '/common/login/'
-# LOGIN_REDIRECT_URL = '/'
+if KING:
+    LOGIN_URL = 'common/login/'
+    LOGIN_REDIRECT_URL = '/catgree'
+else:
+    # LOGIN_URL = '/common/login/'
+    LOGIN_URL = 'common/login/'
+    LOGIN_REDIRECT_URL = '/'
 
 # Debug toolbar
 INTERNAL_IPS = {'10.0.0.99', '10.0.0.98', '192.168.0.13', '127.0.0.1'}

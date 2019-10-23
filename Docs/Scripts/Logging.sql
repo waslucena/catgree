@@ -2,7 +2,14 @@ CREATE SCHEMA logging;
 
 CREATE TABLE logging.log_history (
     id  serial,
-l);
+    tstamp timestamp DEFAULT now(),
+    schemaname text,
+    tabname text,
+    operation text,
+    who text DEFAULT current_user,
+    new_val json,
+    old_val json
+);
 
 CREATE FUNCTION change_trigger() RETURNS trigger AS $$
 BEGIN

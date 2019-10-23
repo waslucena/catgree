@@ -15,7 +15,7 @@ Cadastros:
         Raça
         Exame obrigatórios
         Cor: analise de risco
-        Clube
+        Clube: só gatil, não precisa de clube
         Histórico de registros
         Histórico de donos
         Títulos de competições?
@@ -103,3 +103,5 @@ TOL
 TOS
 
 
+JAA758DA
+JAA783DA

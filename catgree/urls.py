@@ -74,7 +74,7 @@ urlpatterns = [
     # url(r'^teste', views.index2, name='index2'),
     # url(r'^x', x, name='index3'),
     url(r'^$', views.index, name='index'),
-    url(r'^goflow/', include('goflow.urls')),
+    url(r'^goflow/', include('goflow.urls', namespace='goflow')),
 
     # url(r'^ajax_select/', include(ajax_select_urls)),
 ]

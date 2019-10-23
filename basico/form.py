@@ -3,7 +3,7 @@ from common.fields import FormSetField
 from common.form import CommonModelForm, formatoNumeroZero6
 from common.layout import LabelFirstDetail, layout_logusuario, glyphicon_calendar
 from crispy_forms.bootstrap import InlineField, AppendedText, InlineRadios, Tab, TabHolder
-from crispy_forms.layout import Layout, Div, Fieldset, Field, Row
+from crispy_forms.layout import Layout, Div, Fieldset, Field, Row, Hidden
 from dal import autocomplete
 from django import forms
 from table import Table
@@ -390,7 +390,7 @@ class GatoInlineForm(CommonModelForm):
                              # Div(css_class='col-xs-1'),
                              Div(InlineRadios('sexo'), css_class='col-sm-2'),
                              # Div(css_class='col-xs-1'),
-                             Div('gatil', css_class='col-sm-6', disabled='disabled',),
+                             Div(Hidden('gatil', 'value'), css_class='col-sm-6', disabled='disabled',),
                              Div(InlineRadios('outcross'), css_class='col-sm-2'),
                              # css_class='row',
                          ),
@@ -413,8 +413,8 @@ class GatoInlineForm(CommonModelForm):
             ),
             Div(
                 Fieldset('Pais',
-                         'pai',
-                         'mae',
+                         Hidden('pai', 'value'),
+                         Hidden('mae', 'value'),
                          disabled='disabled',
                          ),
                 # hidden="true",
@@ -457,6 +457,7 @@ gatoform_class = forms.inlineformset_factory(parent_model=Ninhada, model=Gato, f
                                              extra=0, min_num=1, can_delete=True, validate_max=True, validate_min=True)
 
 extrajavascriptNinhada = """
+$(document).ready(function() {
 $('#id_main-qtde').change(function(e) {
     var q = e.target.value;
     var di = $('.js-django-inlines').data('djangoInline');
@@ -464,8 +465,8 @@ $('#id_main-qtde').change(function(e) {
     for (;parseInt(management.total_forms.value) < parseInt(q);) {
       di.addForm();
     }
-    for (var i = q; parseInt(management.total_forms.value) > parseInt(q); i--) {
-      di.removeFormAt(parseInt(management.total_forms.value)-1);
+    for (var i = parseInt(management.total_forms.value)-1; parseInt(management.total_forms.value) > parseInt(q); i--) {
+      di.removeFormAt(i);
     }
     management.min_forms.value = q
     $("#" + management.group_id_prefix + "-MIN_NUM_FORMS").val(q);
@@ -479,7 +480,10 @@ function defaultSelect(main, id) {
 
 defaultSelect('gato', 'pai');
 defaultSelect('gato', 'mae');
-defaultSelect('gato', 'gatil');    
+defaultSelect('gato', 'gatil');
+/*defaultSelect('gato', 'raca');*/
+
+});
 
 """
 
@@ -491,7 +495,7 @@ class NinhadaForm(CommonModelForm):
         super().__init__(*args, **kwargs)
         if self.instance:
             self.fields['gato'].empty_permitted = False
-            self.fields['gato'].required.min_num = self.instance.qtde
+            self.fields['gato'].required.min_num = self.instance.qtde if self.instance.qtde else 1
             # self.fields['gato'].required.max_num = self.instance.qtde
             # self.fields['gato'].initial = self.instance.qtde
 

@@ -20,13 +20,13 @@
 {#{% compress css %}#}
   {# <link href="{% static 'css/normalize.css' %}" rel="stylesheet"> é necessário??? #}
   {# Bootstrap 3.3.7 #}
-  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'css/bootstrap-datepicker3.min.css' %}" rel="stylesheet">
-  <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" integrity="sha256-FAOaXTpl90/K8cXmSdsskbQN3nKYulhCpPbcFzGTWKI=" crossorigin="anonymous" />
+  {# Datatables #}
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-html5-1.5.6/b-print-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/plug-ins/1.10.19/features/searchHighlight/dataTables.searchHighlight.css"/>
   {# Font Awesome #}
-  <link href="{% static 'css/all.min.css' %}" rel="stylesheet">
-{#  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">#}
-{#  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-LRlmVvLKVApDVGuspQFnRQJjkv0P7/YFrw84YYQtmYG4nK8c+M+NlmYDCv0rKWpG" crossorigin="anonymous">#}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet">
   {# AdminLTE #}
   <link href="{% static 'css/AdminLTE_custom.css' %}" rel="stylesheet">
   {# DAL - Django Autocomplete Light #}
@@ -37,8 +37,9 @@
          Make sure you apply the skin class to the body tag so the changes take effect. -->
 {% endcomment %}
   <link href="{% static 'dist/css/skins/skin-blue.min.css' %}" rel="stylesheet">
-{#  <link href="{% static 'css/jqtree.css' %}" rel="stylesheet"> {# css da Tree de plano de contas - https://github.com/mbraak/jqTree #}
 
+  {# css da Tree de plano de contas - https://github.com/mbraak/jqTree #}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqtree/1.4.10/jqtree.css" integrity="sha256-cdAizr6jnp1ghWyanxaKTU4N0Dpb+RTCeGoJ3P51zEA=" crossorigin="anonymous" />
   {# DAL - Django Autocomplete Light coloca em media do Widget o css usado e os js #}
   {# form.media.css #}
 
@@ -111,14 +112,14 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              {% if user.get_username %}<img src="{% static 'img/' %}{% firstof user.get_username %}.jpg" class="user-image" alt="User Image">{% endif %}
+              {% if user.get_username %}<img src="{% static 'img/' %}{% firstof user.get_username %}.jpg" class="user-image" alt="User Image" onerror="this.src='static/img/logo.png'">{% endif %}
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">{% firstof user.get_short_name user.get_username %}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                {% if user.get_username %}<img src="{% static 'img/' %}{% firstof user.get_username %}.jpg" class="img-circle" alt="User Image">{% endif %}
+                {% if user.get_username %}<img src="{% static 'img/' %}{% firstof user.get_username %}.jpg" class="img-circle" alt="User Image" onerror="this.src='static/img/logo.png'">{% endif %}
 
                 <p>
                   {% firstof user.get_full_name user.get_username %}
@@ -147,7 +148,7 @@ desired effect
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="{% url 'admin:logout' %}" class="btn btn-default btn-flat">Log out</a>
+                  <a href="{% url 'logoutX' %}" class="btn btn-default btn-flat">Log out</a>
                 </div>
               </li>
             </ul>
@@ -169,7 +170,7 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          {% if user.get_username %}<img src="{% static 'img/' %}{% firstof user.get_username %}.jpg" class="img-circle" alt="User Image" onerror="this.src='{% static 'real-estate-icons-by-iconspedia/png/32x32/' %}House.png'">{% endif %}
+          {% if user.get_username %}<img src="{% static 'img/' %}{% firstof user.get_username %}.jpg" class="img-circle" alt="User Image" onerror="this.src='static/img/logo.png'">{% endif %}
         </div>
         <div class="pull-left info">
           <p>{{ user.first_name }} {{ user.last_name }}</p>
@@ -193,7 +194,7 @@ desired effect
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
         <li class="header">{% trans 'Main Menu'|upper %}</li>
-{% if perms.common.add_estado or perms.common.add_municipio or perms.common.add_cep or perms.cliente.add_pessoa %}
+{% if perms.cliente.add_estado or perms.cliente.add_municipio or perms.cliente.add_cep or perms.cliente.add_pessoa %}
         <li class="treeview">
           <a href="#"><i class="fa fa-cog"></i> <span>Cadastros</span>
             <span class="pull-right-container">
@@ -201,44 +202,44 @@ desired effect
             </span>
           </a>
           <ul class="treeview-menu">
-  {% if perms.common.add_estado or perms.common.add_municipio or perms.common.add_cep or perms.cliente.add_pessoa %}
+  {% if perms.cliente.add_estado or perms.cliente.add_municipio or perms.cliente.add_cep or perms.cliente.add_pessoa %}
             <li>
               <a href="#"><i class="far fa-dot-circle"></i> Comuns<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
               <ul class="treeview-menu">
-    {% if perms.common.add_estado %}
-                <li><a href="/#{% url 'estado' %}"><i class="far fa-dot-circle"></i> Estados</a></li>
+    {% if perms.cliente.add_estado %}
+                <li><a href="#{% url 'estado' %}"><i class="far fa-dot-circle"></i> Estados</a></li>
     {% endif %}
-    {% if perms.common.add_municipio %}
-                <li><a href="/#{% url 'municipio' %}"><i class="far fa-dot-circle"></i> Municipios</a></li>
+    {% if perms.cliente.add_municipio %}
+                <li><a href="#{% url 'municipio' %}"><i class="far fa-dot-circle"></i> Municipios</a></li>
     {% endif %}
-    {% if perms.common.add_cep %}
-                <li><a href="/#{% url 'cep' %}"><i class="far fa-dot-circle"></i> CEP</a></li>
+    {% if perms.cliente.add_cep %}
+                <li><a href="#{% url 'cep' %}"><i class="far fa-dot-circle"></i> CEP</a></li>
     {% endif %}
               </ul>
             </li>
   {% endif %}
-  {% if perms.common.add_clientes %}
+  {% if perms.cliente.add_pessoa %}
             <li>
               <a href="#"><i class="far fa-dot-circle"></i> Clientes<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
               <ul class="treeview-menu">
-                <li><a href="/#{% url 'pessoaFisica' %}"><i class="far fa-dot-circle"></i> Pessoa Física</a></li>
-                <li><a href="/#{% url 'pessoaJuridica' %}"><i class="far fa-dot-circle"></i> Pessoa Jurídica</a></li>
+                <li><a href="#{% url 'pessoaFisica' %}"><i class="far fa-dot-circle"></i> Pessoa Física</a></li>
+                <li><a href="#{% url 'pessoaJuridica' %}"><i class="far fa-dot-circle"></i> Pessoa Jurídica</a></li>
               </ul>
             </li>
   {% endif %}
-  {% if perms.common.add_banco %}
+  {% if perms.finan.add_banco %}
             <li>
               <a href="#"><i class="far fa-dot-circle"></i> Financeiros<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
               <ul class="treeview-menu">
-                <li><a href="/#{% url 'banco' %}"><i class="far fa-dot-circle"></i> Bancos</a></li>
-                <li><a href="/#{% url 'indice' %}"><i class="far fa-dot-circle"></i> Índices de Correção</a></li>
+                <li><a href="#{% url 'banco' %}"><i class="far fa-dot-circle"></i> Bancos</a></li>
+                <li><a href="#{% url 'indice' %}"><i class="far fa-dot-circle"></i> Índices de Correção</a></li>
               </ul>
             </li>
   {% endif %}
           </ul>
         </li>
 {% endif %}
-{% if perms.common.add_cor %}
+{% if perms.basico.add_cor %}
         <li class="treeview">
           <a href="#"><i class="fa fa-cat"></i> <span>Básicos</span>
             <span class="pull-right-container">
@@ -246,11 +247,11 @@ desired effect
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="/#{% url 'gatil' %}"><i class="far fa-dot-circle"></i> Gatil</a></li>
-            <li><a href="/#{% url 'raca' %}"><i class="far fa-dot-circle"></i> Raça</a></li>
-            <li><a href="/#{% url 'regra' %}"><i class="far fa-dot-circle"></i> Regra de Cor</a></li>
-            <li><a href="/#{% url 'gato' %}"><i class="far fa-dot-circle"></i> Gatos</a></li>
-            <li><a href="/#{% url 'ninhada' %}"><i class="far fa-dot-circle"></i> Ninhada</a></li>
+            <li><a href="#{% url 'gatil' %}"><i class="far fa-dot-circle"></i> Gatil</a></li>
+            <li><a href="#{% url 'raca' %}"><i class="far fa-dot-circle"></i> Raça</a></li>
+            <li><a href="#{% url 'regra' %}"><i class="far fa-dot-circle"></i> Regra de Cor</a></li>
+            <li><a href="#{% url 'gato' %}"><i class="far fa-dot-circle"></i> Gatos</a></li>
+            <li><a href="#{% url 'ninhada' %}"><i class="far fa-dot-circle"></i> Ninhada</a></li>
           </ul>
         </li>
 {% endif %}
@@ -262,8 +263,8 @@ desired effect
 {#            </span>#}
 {#          </a>#}
 {#          <ul class="treeview-menu">#}
-{#            <li><a href="/#{% url 'atendimento' %}"><i class="far fa-dot-circle"></i>Pendentes</a></li>#}
-{#            <li><a href="/#{% url 'atendimento_all' %}"><i class="far fa-dot-circle"></i>Todos</a></li>#}
+{#            <li><a href="#{% url 'atendimento' %}"><i class="far fa-dot-circle"></i>Pendentes</a></li>#}
+{#            <li><a href="#{% url 'atendimento_all' %}"><i class="far fa-dot-circle"></i>Todos</a></li>#}
 {#          </ul>#}
 {#        </li>#}
 {#{% endif %}#}
@@ -274,10 +275,10 @@ desired effect
 {#            </span>#}
 {#          </a>#}
 {#          <ul class="treeview-menu">#}
-{#            <li><a href="/#{% url 'workflow_myworks' %}"><i class="far fa-dot-circle"></i>Meus Workflows</a></li>#}
-{#            <li><a href="/#{% url 'workflow_news' %}"><i class="far fa-dot-circle"></i>Novos/Sem Responsável</a></li>#}
-{#            <li><a href="/#{% url 'workflow_pending' %}"><i class="far fa-dot-circle"></i>Pendências</a></li>#}
-{#            <li><a href="/#{% url 'workflow_all' %}"><i class="far fa-dot-circle"></i>Todos os Workflows</a></li>#}
+{#            <li><a href="#{% url 'workflow_myworks' %}"><i class="far fa-dot-circle"></i>Meus Workflows</a></li>#}
+{#            <li><a href="#{% url 'workflow_news' %}"><i class="far fa-dot-circle"></i>Novos/Sem Responsável</a></li>#}
+{#            <li><a href="#{% url 'workflow_pending' %}"><i class="far fa-dot-circle"></i>Pendências</a></li>#}
+{#            <li><a href="#{% url 'workflow_all' %}"><i class="far fa-dot-circle"></i>Todos os Workflows</a></li>#}
 {#          </ul>#}
 {#        </li>#}
 {% comment Imobiliar DESATIVADO %}
@@ -290,15 +291,15 @@ desired effect
           </a>
           <ul class="treeview-menu">
   {% if perms.imobiliar.add_taxas %}
-            <li><a href="/#{% url 'taxas' %}"><i class="far fa-dot-circle"></i> Taxas</a></li>
+            <li><a href="#{% url 'taxas' %}"><i class="far fa-dot-circle"></i> Taxas</a></li>
   {% endif %}
   {% if perms.imobiliar.add_balancete or perms.imobiliar.add_pessoa %}
             <li>
               <a href="#"><i class="far fa-dot-circle"></i>Geral<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
               <ul class="treeview-menu">
-                <li><a href="/#{% url 'balancete' %}"><i class="far fa-dot-circle"></i> Balancete Data Pgto</a></li>
-                <li><a href="/#{% url 'razao' %}"><i class="far fa-dot-circle"></i> Razão por Data Pgto</a></li>
-                <li><a href="/#{% url 'balanceteCompetencia' %}"><i class="far fa-dot-circle"></i> Balancete por Compet.</a></li>
+                <li><a href="#{% url 'balancete' %}"><i class="far fa-dot-circle"></i> Balancete Data Pgto</a></li>
+                <li><a href="#{% url 'razao' %}"><i class="far fa-dot-circle"></i> Razão por Data Pgto</a></li>
+                <li><a href="#{% url 'balanceteCompetencia' %}"><i class="far fa-dot-circle"></i> Balancete por Compet.</a></li>
               </ul>
             </li>
   {% endif %}
@@ -306,10 +307,10 @@ desired effect
             <li>
               <a href="#"><i class="far fa-dot-circle"></i> Proprietário<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
               <ul class="treeview-menu">
-                <li><a href="/#{% url 'balanceteProp' %}"><i class="far fa-dot-circle"></i> Balancete</a></li>
-                <li><a href="/#{% url 'razaoProp' %}"><i class="far fa-dot-circle"></i> Razão</a></li>
-                <li><a href="/#{% url 'competenciaProp' %}"><i class="far fa-dot-circle"></i> Análise por Competência</a></li>
-                <li><a href="/#{% url 'naoPagasProp' %}"><i class="far fa-dot-circle"></i> Contas a Pagar Não Pagas</a></li>
+                <li><a href="#{% url 'balanceteProp' %}"><i class="far fa-dot-circle"></i> Balancete</a></li>
+                <li><a href="#{% url 'razaoProp' %}"><i class="far fa-dot-circle"></i> Razão</a></li>
+                <li><a href="#{% url 'competenciaProp' %}"><i class="far fa-dot-circle"></i> Análise por Competência</a></li>
+                <li><a href="#{% url 'naoPagasProp' %}"><i class="far fa-dot-circle"></i> Contas a Pagar Não Pagas</a></li>
               </ul>
             </li>
   {% endif %}
@@ -317,7 +318,7 @@ desired effect
             <li>
               <a href="#"><i class="far fa-dot-circle"></i>Imóvel<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
               <ul class="treeview-menu">
-                <li><a href="/#{% url 'tarefasImovel' %}"><i class="far fa-dot-circle"></i>Tarefas de Imóvel</a></li>
+                <li><a href="#{% url 'tarefasImovel' %}"><i class="far fa-dot-circle"></i>Tarefas de Imóvel</a></li>
               </ul>
             </li>
   {% endif %}
@@ -325,7 +326,7 @@ desired effect
         </li>
 {% endif %}
 {% endcomment %}
-{#        <li><a href="/#{% url 'configuracao' %}"><i class="fa fa-cogs" aria-hidden="true"></i> <span>Configuração de Empresas</span></a></li>#}
+{#        <li><a href="#{% url 'configuracao' %}"><i class="fa fa-cogs" aria-hidden="true"></i> <span>Configuração de Empresas</span></a></li>#}
       </ul>
       <!-- /.sidebar-menu -->
     </section>
@@ -486,7 +487,7 @@ desired effect
         <h3 class="control-sidebar-heading">Recent Activity</h3>
         <ul class="control-sidebar-menu">
           <li>
-            <a href="javascript::;">
+            <a href="javascript:">
               <i class="menu-icon fa fa-birthday-cake bg-red"></i>
 
               <div class="menu-info">
@@ -502,7 +503,7 @@ desired effect
         <h3 class="control-sidebar-heading">Tasks Progress</h3>
         <ul class="control-sidebar-menu">
           <li>
-            <a href="javascript::;">
+            <a href="javascript:">
               <h4 class="control-sidebar-subheading">
                 Custom Template Design
                 <span class="pull-right-container">
@@ -553,13 +554,20 @@ desired effect
 
 {# REQUIRED JS SCRIPTS #}
 {#{% compress js %}#}
-<script src="{% static 'js/js.cookie.min.js' %}"></script> {# lib para leitura/gravação de cookie #}
-<script src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
-<script src="{% static 'js/jquery.maskedinput.min.js' %}"></script>
-{# Bootstrap 3.3.6 #}
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-datepicker.min.js' %}"></script>
-<script src="{% static 'js/bootstrap-datepicker.pt-BR.min.js' %}"></script>
+{#  js-cookie deveria ser 2.1.3, confirmar se funciona #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.0/js.cookie.js" integrity="sha256-ZTMFCvouhTVozUsLgEjtZOlJY+OAiLImV1p8yoBU9OI=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js" integrity="sha256-fvFKHgcKai7J/0TM9ekjyypGDFhho9uKmuHiFVfScCA=" crossorigin="anonymous"></script>
+{# Bootstrap 3.3.7 #}
+{# <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js" integrity="sha256-bqVeqGdJ7h/lYPq6xrPv/YGzMEb6dNxlfiTUHSgRCp8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.pt-BR.min.js" integrity="sha256-QN6KDU+9DIJ/9M0ynQQfw/O90ef0UXucGgKn0LbUtq4=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js" integrity="sha256-wLefPvftUZaYEQquDfRpnXG8nkR2o9vutAcDLNe64R0=" crossorigin="anonymous"></script>{# biblioteca para formatar números em js #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script> {# momentjs - biblioteca para formatar data em js #}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/locale/pt-br.js" integrity="sha256-aIToY7VLU5x+toAJcyINV0WEogFBCIVeeWhyUbCaYiQ=" crossorigin="anonymous"></script> {# momentjs - locale pt-BR #}
+
 {# AdminLTE App #}
 <script src="{% static 'dist/js/app.min.js' %}"></script>
 <script>
@@ -617,17 +625,14 @@ $(function () {
      user experience. Slimscroll is required when using the
      fixed layout. -->
 
-<script src="{% static 'js/jquery.django-inlines.js' %}"></script>
-<script src="{% static 'js/accounting.min.js' %}"></script> {# biblioteca para formatar números em js #}
-<script src="{% static 'js/moment-2.22.1.min.js' %}"></script> {# momentjs - biblioteca para formatar data em js #}
-<script src="{% static 'js/locale/pt-br.js' %}"></script> {# momentjs - locale pt-BR #}
-{#<script src="{% static 'js/jquery.rest.min.js' %}"></script> {# DRF #}
-<script src="{% static 'js/common.js' %}"></script>
-<script src="{% static 'js/tree.jquery.min.js' %}"></script>
+{# FTLBASE #}
+<script type="text/javascript" src="{% static 'js/jquery.django-inlines.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/common.js' %}"></script>
 
 {% if idTree %}
-<script src="{% static 'js/tree.jquery.min.js' %}"></script>
-<script>{# http://mbraak.github.io/jqTree #}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqtree/1.4.10/tree.jquery.js" integrity="sha256-McRigQCXSQIw9JuHnXpWi1UEtG7Ebjf9I960Rp/XBcM=" crossorigin="anonymous"></script> {# http://mbraak.github.io/jqTree #}
+<script>
+{# http://mbraak.github.io/jqTree #}
 var $tree = $("#{{ idTree }}");
 var acaoURL="{{ acaoURL|safe }}";
 var detalheText="{{ detail }}";
@@ -638,9 +643,10 @@ var updateParentText="{{ updateParent }}";
 
 <!-- riot -->
 {#<script src="{% static 'js/riot+compiler.min.js' %}"></script>#}
-<script src="{% static 'js/riot.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/riot/3.10.0/riot.min.js" integrity="sha256-N5MmxGnjhUXUgPVIh0i4D3NyMSLQxFgRgHRi6QSmsD4=" crossorigin="anonymous"></script>
 <script src="{% static 'js/route.js' %}"></script>
 
+{#  Riot FTL Base #}
 <script src="{% static 'tags/ftl-menu-button.js' %}"></script>
 <script src="{% static 'tags/ftl-badge-days.js' %}"></script>
 <script src="{% static 'tags/ftl-workflow.js' %}"></script>
@@ -692,22 +698,24 @@ $(document).ready(function() {
   document.getElementById('ftl-page-load').value='loaded'; // Sinaliza que concluiu o carregamento da página
 });
 </script>
-<script src="{% static 'js/datatables.min.js' %}"></script>
-<script src="{% static 'js/jquery.highlight.js' %}"></script>
-<script src="{% static 'js/dataTables.searchHighlight.min.js' %}"></script>
-<script src="{% static 'js/buttons.print.min.js' %}"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs/jszip-2.5.0/dt-1.10.18/af-2.3.3/b-1.5.6/b-colvis-1.5.6/b-html5-1.5.6/b-print-1.5.6/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/features/searchHighlight/dataTables.searchHighlight.min.js"></script>
+https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js
+
+{#TODO: SERÁ QUE PRECISA???? <script src="{% static 'js/jquery.highlight.js' %}"></script>#}
 
 <script src="{% static 'js/select2/jquery.init.js' %}"></script>
 <script src="{% static 'js/select2/autocomplete.init.js' %}"></script>
 <script src="{% static 'js/select2/select2.full.js' %}"></script>
 <script src="{% static 'js/select2/select2.js' %}"></script>
-
 <script src="{% static 'js/select2/select2-forward.js' %}"></script>
-
 <script src="{% static 'js/select2/pt-br.js' %}"></script>
 
 {# jquery.event-trace: Usado para logar todos os eventos gerados pelo jquery #}
-{#<script src="{% static 'js/jquery.event-trace.js' %}"></script>#}
+{#<script type="text/javascript" src="{% static 'js/jquery.event-trace.js' %}"></script>#}
 
 {% block extrajavascript %}
 {# DAL - Django Autocomplete Light coloca em media do Widget o css usado e os js #}
@@ -718,6 +726,7 @@ $(document).ready(function() {
 {#{% endcompress %}#}
 
 <input type="hidden" id="ftl-page-load" value="loading" />
+
 </body>
 </html>
 {% endspaceless %}
